@@ -19,7 +19,7 @@ os.makedirs("static", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 DB_PATH = os.getenv("WORKFORCE_DB_PATH", "archetypus_os_v5.db")
-MEASUREMENT_WINDOW = "7-Day Rolling Window (Nov 10 – Nov 16, 2026)"
+MEASUREMENT_WINDOW = "Q4 2026 Live Control Plane (S-1 / Post-Oct 2026 Baseline)"
 
 GLOBAL_HUBS = [
     "San Francisco (HQ)", "New York", "Seattle", "Washington D.C.",
@@ -27,14 +27,27 @@ GLOBAL_HUBS = [
     "Tokyo", "Seoul"
 ]
 
+# Anchored to Anthropic's S-1 & Q3/Q4 2026 public operating disclosures
+ANTHROPIC_BENCHMARKS = {
+    "headcount_s1": 5300,
+    "open_roles_live": 683,
+    "revenue_run_rate_b": 81.0,
+    "q3_compute_spend_b": 9.9,
+    "q3_personnel_spend_b": 1.71,
+    "compute_to_people_ratio": "5.8x",
+    "agent_vs_human_hours_ratio": 1.42,
+    "valuation_b": 965.0,
+}
+
 OPERATING_PRINCIPLE = {
     "title": "Anthropic Global Archetypus Thinking & Workforce Platform",
     "subtitle": "Learn what the organisation knows · Identify what it needs next · Coordinate execution · Independently verify outcomes.",
     "measurement_window": MEASUREMENT_WINDOW,
     "global_hubs": GLOBAL_HUBS,
+    "benchmarks": ANTHROPIC_BENCHMARKS,
 }
 
-# --- RECONCILED 20 DIVISIONS (5,300 STAFF · 661 OPEN ROLES · 39 SUB-PODS) ---
+# --- RECONCILED 20 DIVISIONS (5,300 STAFF · 683 OPEN ROLES · 39 SUB-PODS) ---
 DEPARTMENTS = [
     {
         "id": "sales", "name": "Sales", "roles": 124, "headcount": 780,
@@ -47,7 +60,7 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "ai-research", "name": "AI Research & Engineering", "roles": 73, "headcount": 680,
+        "id": "ai-research", "name": "AI Research & Engineering", "roles": 84, "headcount": 680,
         "director": "Dir. Frontier Research", "base_risk": 2,
         "hubs": "San Francisco, London, Zurich, New York",
         "charter": "Evaluates 7-dimension applicability before compute; auto-triggers REVALIDATE on model generation shifts (4.5 -> 5.5).",
@@ -59,7 +72,7 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "applied-ai", "name": "Applied AI", "roles": 67, "headcount": 420,
+        "id": "applied-ai", "name": "Applied AI", "roles": 71, "headcount": 420,
         "director": "Dir. Enterprise Solutions", "base_risk": 1,
         "hubs": "San Francisco, New York, Dublin, London, Tokyo",
         "charter": "Clones validated enterprise RAG/agent blueprints; builds client-specific schema deltas only.",
@@ -69,7 +82,7 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "security", "name": "Security", "roles": 54, "headcount": 320,
+        "id": "security", "name": "Security", "roles": 56, "headcount": 320,
         "director": "Dir. Model Weight Security", "base_risk": 3,
         "hubs": "San Francisco, Seattle, Dublin, London",
         "charter": "Enforces least-privilege read/write scopes; deduplicates CVEs/IOCs and requires Level-3 human attestation.",
@@ -79,7 +92,7 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "eng-product", "name": "Engineering & Design - Product", "roles": 51, "headcount": 540,
+        "id": "eng-product", "name": "Engineering & Design - Product", "roles": 54, "headcount": 540,
         "director": "Dir. Claude Product Eng", "base_risk": 1,
         "hubs": "San Francisco, New York, Seattle, Dublin",
         "charter": "Consumes canonical Data Science metric batons and UI registries; enforces minimal AST diffs.",
@@ -99,7 +112,7 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "swe-infra", "name": "Software Engineering - Infrastructure", "roles": 38, "headcount": 490,
+        "id": "swe-infra", "name": "Software Engineering - Infrastructure", "roles": 40, "headcount": 490,
         "director": "Dir. Inference & Distributed Sys", "base_risk": 2,
         "hubs": "San Francisco, Seattle, Dublin, Zurich",
         "charter": "Executes Execution Contract Batons with mandatory 30-second rollback flags before promoting kernel changes.",
@@ -110,7 +123,7 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "safeguards", "name": "Safeguards (Trust & Safety)", "roles": 35, "headcount": 310,
+        "id": "safeguards", "name": "Safeguards (Trust & Safety)", "roles": 36, "headcount": 310,
         "director": "Dir. ASL & Alignment Eval", "base_risk": 3,
         "hubs": "San Francisco, Dublin, London, Washington D.C.",
         "charter": "Blocks repeat dead-end filter architectures (KNO-D-042) unless retest triggers are met; Level-3 sign-off on ASL shifts.",
@@ -121,10 +134,10 @@ DEPARTMENTS = [
         ],
     },
     {
-        "id": "compute", "name": "Compute", "roles": 27, "headcount": 240,
+        "id": "compute", "name": "Compute", "roles": 28, "headcount": 240,
         "director": "Dir. Cluster Capacity", "base_risk": 2,
         "hubs": "San Francisco, Seattle",
-        "charter": "Monitors cluster preemption and batch-latency bottlenecks; reuses validated checkpoint schedules.",
+        "charter": "Monitors $9.9B/qtr accelerator efficiency, cluster preemption, and batch-latency bottlenecks.",
         "sub_departments": [
             {"id": "sched", "name": "Trainium2 / GPU Pod Scheduling", "procedure": "Applies validated async checkpoint intervals across 4,096-chip slices."},
             {"id": "cap", "name": "Capacity & Yield Forecasting", "procedure": "Consumes FinOps telemetry batons for quarterly accelerator allocation."},
@@ -172,7 +185,7 @@ DEPARTMENTS = [
         "id": "people", "name": "People", "roles": 16, "headcount": 160,
         "director": "Dir. Talent & Org Design", "base_risk": 1,
         "hubs": "San Francisco, New York, Dublin, London, Tokyo",
-        "charter": "Applies calibrated competency matrices across all 661 open roles globally.",
+        "charter": "Applies calibrated competency matrices across all 683 open roles globally.",
         "sub_departments": [
             {"id": "recruiting", "name": "Technical & GTM Recruiting", "procedure": "Reuses calibrated interview rubrics across all 20 divisions."},
         ],
@@ -238,7 +251,7 @@ SEED_LAYER_E = [
         "pred_id": "PRED-E-001",
         "opportunity_type": "REUSE BOTTLENECK",
         "target_division": "Sales · Security & RFP Desk",
-        "signal_source": "142 duplicate Sonnet-5.5 calls/wk detected querying identical SOC2/ZDR clauses.",
+        "signal_source": "142 duplicate Sonnet-5.5 calls/wk detected querying identical SOC2/ZDR clauses across EMEA & US.",
         "recommended_action": "Route standard security keys directly to deterministic record KNO-B-044 (0 LLM tokens).",
         "expected_value_usd": 1455.34,
         "success_prob": 0.98,
@@ -442,9 +455,9 @@ SEED_BATONS = [
 ]
 
 LIVE_FEED_EVENTS = [
-    {"time": "19:08:12 UTC", "hub": "Dublin (EMEA Hub)", "division": "Sales · RFP Desk", "route": "REUSE", "detail": "Served KNO-B-044 SOC2/ZDR pack deterministically (0 LLM tokens · saved 9,400t)"},
-    {"time": "19:09:44 UTC", "hub": "San Francisco (HQ)", "division": "AI Research", "route": "REVALIDATE", "detail": "Layer E flagged KNO-A-041 Sonnet-4.5 -> 5.5 drift; queued canary sweep"},
-    {"time": "19:10:31 UTC", "hub": "London", "division": "Public Policy", "route": "REUSE", "detail": "Reused KNO-B-045 Governance Core for UK AISI alignment brief"},
+    {"time": "11:12:08 UTC", "hub": "Dublin (EMEA Hub)", "division": "Sales · RFP Desk", "route": "REUSE", "detail": "Served KNO-B-044 SOC2/ZDR pack deterministically (0 LLM tokens · saved 9,400t)"},
+    {"time": "11:13:44 UTC", "hub": "San Francisco (HQ)", "division": "AI Research", "route": "REVALIDATE", "detail": "Layer E flagged KNO-A-041 Sonnet-4.5 -> 5.5 drift; queued canary sweep"},
+    {"time": "11:14:31 UTC", "hub": "London", "division": "Public Policy", "route": "REUSE", "detail": "Reused KNO-B-045 Governance Core for UK AISI alignment brief"},
 ]
 
 
@@ -522,7 +535,8 @@ def init_db(force_reset: bool = False):
             tokens_counterfactual_saved INTEGER, tokens_cached_read INTEGER,
             tokens_retrieved_memory INTEGER, tokens_billed_input INTEGER, tokens_billed_output INTEGER,
             validated_outcomes INTEGER, tasks_total INTEGER, duplicate_prevented INTEGER,
-            control_group_tasks INTEGER, control_group_reused INTEGER
+            control_group_tasks INTEGER, control_group_reused INTEGER,
+            agent_work_hours REAL, human_work_hours REAL
         )
         """
     )
@@ -570,10 +584,10 @@ def init_db(force_reset: bool = False):
             )
         cur.execute(
             "INSERT INTO audit_log VALUES (?,?,?,?,?,?,?)",
-            ("AUD-9001", "2026-11-16T09:10:00Z", "VP Infrastructure", "Level 2 · Department Leader", "BTN-8812", "sha256:9f82c1a4", "APPROVED_EXECUTION_CONTRACT"),
+            ("AUD-9001", "2026-11-17T09:10:00Z", "VP Infrastructure", "Level 2 · Department Leader", "BTN-8812", "sha256:9f82c1a4", "APPROVED_EXECUTION_CONTRACT"),
         )
         cur.execute(
-            "INSERT INTO economics VALUES (1, 14.82, 3.40, 185.00, 62.50, 28.10, 262600, 94200, 86000, 33975, 11325, 23, 25, 19, 29, 7)"
+            "INSERT INTO economics VALUES (1, 14.82, 3.40, 185.00, 62.50, 28.10, 262600, 94200, 86000, 33975, 11325, 23, 25, 19, 29, 7, 301240.0, 212000.0)"
         )
 
     conn.commit()
@@ -605,7 +619,7 @@ def fetch_state():
         batons.append(d)
 
     audits = [dict(r) for r in cur.execute("SELECT * FROM audit_log ORDER BY rowid DESC LIMIT 12").fetchall()]
-    feed = [dict(r) for r in cur.execute("SELECT * FROM live_feed ORDER BY id DESC LIMIT 8").fetchall()]
+    feed = [dict(r) for r in cur.execute("SELECT * FROM live_feed ORDER BY id DESC LIMIT 10").fetchall()]
     eco = dict(cur.execute("SELECT * FROM economics WHERE id = 1").fetchone())
     conn.close()
 
@@ -619,6 +633,7 @@ def fetch_state():
     control_rate = round((eco["control_group_reused"] / max(1, eco["control_group_tasks"])) * 100, 1)
     canonical_count = sum(1 for k in knowledge if k["lifecycle_state"] in ("CANONICAL", "ACTIVELY_MONITORED"))
     freshness_pct = round((canonical_count / max(1, len(knowledge))) * 100, 1)
+    agent_ratio = round(eco.get("agent_work_hours", 301240.0) / max(1.0, eco.get("human_work_hours", 212000.0)), 2)
 
     return {
         "operating_principle": OPERATING_PRINCIPLE,
@@ -644,6 +659,7 @@ def fetch_state():
             "control_rate_pct": control_rate,
             "net_lift_pp": round(reuse_rate - control_rate, 1),
             "freshness_pct": freshness_pct,
+            "agent_to_human_ratio": agent_ratio,
         },
     }
 
@@ -778,13 +794,16 @@ def api_reset():
 @app.post("/api/pulse")
 def api_live_pulse():
     scenarios = [
-        ("Dublin (EMEA Hub)", "Sales · RFP Desk", "REUSE", "Deterministic lookup KNO-B-044 for EU FinServ RFP (0 LLM tokens · saved 9,400t)", 9400, 0, 820, 0, 0, 0.0, 0.12, 1, 1),
-        ("San Francisco (HQ)", "SWE-Infra · Gateway", "REUSE", "Provider prompt-cache hit on Tier-1 Constitution prefix (saved 4,350t)", 4350, 480, 0, 110, 65, 0.0013, 0.08, 1, 1),
-        ("London", "Applied AI · Sol Arch", "REUSE", "Cloned canonical RAG blueprint from Layer B (saved 11,200t)", 11200, 520, 1400, 190, 110, 0.0022, 0.15, 1, 1),
-        ("Tokyo", "PM & Support Ops", "REUSE", "Resolved Tier-2 enterprise API quota query via Layer-B runbook (saved 6,100t)", 6100, 0, 640, 0, 0, 0.0, 0.05, 1, 1),
-        ("New York", "Data Science", "REUSE", "Served canonical retention cohort SQL definition (saved 7,800t)", 7800, 0, 710, 0, 0, 0.0, 0.06, 1, 1),
+        ("Dublin (EMEA Hub)", "Sales · RFP Desk", "REUSE", "Deterministic lookup KNO-B-044 for EU FinServ RFP (0 LLM tokens · saved 9,400t)", 9400, 0, 820, 0, 0, 0.0, 0.12, 1, 1, 14.5),
+        ("San Francisco (HQ)", "SWE-Infra · Gateway", "REUSE", "Provider prompt-cache hit on Tier-1 Constitution prefix (saved 6,850t)", 6850, 620, 0, 110, 65, 0.0013, 0.08, 1, 1, 18.2),
+        ("London", "Applied AI · Sol Arch", "REUSE", "Cloned canonical RAG blueprint from Layer B (saved 12,400t)", 12400, 520, 1400, 190, 110, 0.0022, 0.15, 1, 1, 22.0),
+        ("Tokyo", "PM & Support Ops", "REUSE", "Resolved Tier-2 enterprise API quota query via Layer-B runbook (saved 7,100t)", 7100, 0, 640, 0, 0, 0.0, 0.05, 1, 1, 11.4),
+        ("New York", "Data Science", "REUSE", "Served canonical S-1 cohort SQL definition (saved 8,900t)", 8900, 0, 710, 0, 0, 0.0, 0.06, 1, 1, 16.0),
+        ("Zurich", "AI Research · Interp", "REUSE", "Queried cached SAE feature dictionary before running circuit trace (saved 15,200t)", 15200, 940, 1800, 210, 140, 0.0031, 0.18, 1, 1, 26.5),
+        ("Washington D.C.", "Public Policy", "REUSE", "Derived US NIST delta from canonical Governance Core KNO-B-045 (saved 10,600t)", 10600, 410, 950, 130, 80, 0.0018, 0.09, 1, 1, 19.0),
+        ("Seoul", "Sales · Enterprise GTM", "REUSE", "Pulled verified APAC FinServ ROI benchmark from Layer B (saved 8,300t)", 8300, 0, 590, 0, 0, 0.0, 0.07, 1, 1, 13.8),
     ]
-    hub, div, route, detail, cf_tok, cache_tok, ret_tok, b_in, b_out, inf_usd, ret_usd, val_inc, dup_inc = random.choice(scenarios)
+    hub, div, route, detail, cf_tok, cache_tok, ret_tok, b_in, b_out, inf_usd, ret_usd, val_inc, dup_inc, agent_hrs = random.choice(scenarios)
     now_str = datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
 
     conn = get_db()
@@ -802,10 +821,11 @@ def api_live_pulse():
             tokens_billed_output = tokens_billed_output + ?,
             validated_outcomes = validated_outcomes + ?,
             tasks_total = tasks_total + 1,
-            duplicate_prevented = duplicate_prevented + ?
+            duplicate_prevented = duplicate_prevented + ?,
+            agent_work_hours = agent_work_hours + ?
         WHERE id = 1
         """,
-        (inf_usd, ret_usd, cf_tok, cache_tok, ret_tok, b_in, b_out, val_inc, dup_inc),
+        (inf_usd, ret_usd, cf_tok, cache_tok, ret_tok, b_in, b_out, val_inc, dup_inc, agent_hrs),
     )
     conn.commit()
     conn.close()
@@ -959,7 +979,8 @@ def api_dispatch(req: GateDispatchRequest):
             cost_infrastructure_usd = cost_infrastructure_usd + ?, tokens_counterfactual_saved = tokens_counterfactual_saved + ?,
             tokens_cached_read = tokens_cached_read + ?, tokens_retrieved_memory = tokens_retrieved_memory + ?,
             tokens_billed_input = tokens_billed_input + ?, tokens_billed_output = tokens_billed_output + ?,
-            validated_outcomes = validated_outcomes + ?, tasks_total = tasks_total + 1, duplicate_prevented = duplicate_prevented + ?
+            validated_outcomes = validated_outcomes + ?, tasks_total = tasks_total + 1, duplicate_prevented = duplicate_prevented + ?,
+            agent_work_hours = agent_work_hours + 18.5
         WHERE id = 1
         """,
         (inf_usd, ret_usd, hum_usd, exp_usd, infra_usd, cf_saved_tok, cached_tok, retrieved_tok, bill_in, bill_out, val_inc, dup_inc),
