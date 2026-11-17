@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anthropic Global Archetypus Thinking &amp; Workforce Platform</title>
+  <link rel="icon" type="image/png" href="/static/anthropic-flower.png" />
+  <style>
+    :root {
+      --bg: #F5F4EF; --surface: #FFFFFF; --surface-alt: #ECEAE2;
+      --ink: #191918; --muted: #5C5B55; --border: #DCD9CE;
+      --accent: #D97757; --accent-dark: #B85D40;
+      --green: #1E6F50; --green-bg: #E6F3ED;
+      --red: #A63A3A; --red-bg: #F9EAEA;
+      --amber: #9A6700; --amber-bg: #FDF5E2;
+      --blue: #1D4ED8; --blue-bg: #EFF6FF;
+      --purple: #6D28D9; --purple-bg: #F3E8FF;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.5; }
+
+    header {
+      background: var(--ink); color: #F5F4EF; padding: 14px 28px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .brand { display: flex; align-items: center; gap: 16px; max-width: 820px; }
+    .brand-logo-wrap {
+      width: 78px; height: 78px; min-width: 78px; flex-shrink: 0; border-radius: 12px;
+      background: #F5F4EF; display: flex; align-items: center; justify-content: center;
+      padding: 5px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+    .brand-logo-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .badge { background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.06em; text-transform: uppercase; display: inline-block; margin-bottom: 3px; }
+    .subtitle { font-size: 12.5px; color: #B8B5AA; margin-top: 2px; }
+
+    .kpis { display: flex; gap: 10px; flex-wrap: wrap; }
+    .kpi { background: rgba(255,255,255,0.07); padding: 8px 13px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); transition: background 0.35s, border-color 0.35s; }
+    .kpi.flash { background: rgba(110, 231, 183, 0.22); border-color: #6EE7B7; }
+    .kpi-val { font-family: var(--mono); font-size: 16px; font-weight: 700; color: #fff; }
+    .kpi-val.green { color: #6EE7B7; }
+    .kpi-lbl { font-size: 9.5px; color: #B8B5AA; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    .subnav {
+      background: #252422; color: #E8E5DC; padding: 10px 28px; border-bottom: 2px solid var(--accent);
+      display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .nav-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .nav-tab {
+      background: rgba(255,255,255,0.08); color: #E8E5DC; border: 1px solid rgba(255,255,255,0.15);
+      padding: 7px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    }
+    .nav-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    .live-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .live-pill {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 20px;
+      font-family: var(--mono); font-size: 11px; font-weight: 700; cursor: pointer;
+      background: rgba(110, 231, 183, 0.14); color: #6EE7B7; border: 1px solid rgba(110, 231, 183, 0.35);
+    }
+    .live-pill.paused { background: rgba(255,255,255,0.08); color: #B8B5AA; border-color: rgba(255,255,255,0.2); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #6EE7B7; animation: pulse 1.6s infinite; }
+    .paused .dot { background: #9CA3AF; animation: none; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+
+    .btn-ghost {
+      background: transparent; color: #E8E5DC; border: 1px solid rgba(255,255,255,0.22);
+      padding: 5px 11px; border-radius: 5px; font-size: 11.5px; cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+    .scale-strip {
+      max-width: 1460px; margin: 14px auto 0; padding: 11px 18px; background: var(--surface);
+      border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 8px;
+      display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 13px;
+    }
+    .scale-pills { display: flex; gap: 8px; flex-wrap: wrap; font-family: var(--mono); font-size: 11.5px; }
+    .scale-pill { background: var(--surface-alt); padding: 5px 11px; border-radius: 6px; border: 1px solid var(--border); font-weight: 700; cursor: pointer; }
+    .scale-pill:hover { border-color: var(--accent); background: #FAF9F5; }
+
+    .container { max-width: 1460px; margin: 16px auto 32px; padding: 0 24px; display: grid; grid-template-columns: 440px 1fr; gap: 22px; }
+    .full-container { max-width: 1460px; margin: 16px auto 32px; padding: 0 24px; display: none; }
+    @media (max-width: 1024px) { .container { grid-template-columns: 1fr; } }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 18px; }
+    .step-num { font-family: var(--mono); font-size: 10.5px; font-weight: 700; color: var(--accent-dark); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    h2 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .helper { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin: 11px 0 4px; }
+    select, textarea, input[type="text"], input[type="number"], input[type="search"] {
+      width: 100%; padding: 9px 11px; border: 1px solid var(--border); border-radius: 7px;
+      font-family: var(--sans); font-size: 13px; background: #FAF9F5; color: var(--ink);
+    }
+    textarea { resize: vertical; min-height: 62px; }
+
+    .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px; }
+    .scen-btn {
+      text-align: left; padding: 8px 10px; border-radius: 7px; border: 1px solid var(--border);
+      background: #FAF9F5; cursor: pointer; transition: 0.15s;
+    }
+    .scen-btn:hover { border-color: var(--accent); background: var(--surface-alt); }
+    .scen-title { font-size: 12px; font-weight: 700; color: var(--ink); }
+    .scen-sub { font-size: 10.5px; color: var(--muted); }
+
+    .btn-primary {
+      width: 100%; margin-top: 14px; padding: 12px; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-sm { padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); }
+    .btn-sm:hover { border-color: var(--accent); }
+    .btn-approve { padding: 6px 12px; background: var(--green); color: #fff; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 5px; font-family: var(--mono); font-size: 10.5px; font-weight: 700; }
+    .tag.reuse, .tag.canonical, .tag.current { background: var(--green-bg); color: var(--green); }
+    .tag.revalidate, .tag.requiring_revalidation, .tag.due_for_review { background: var(--amber-bg); color: var(--amber); }
+    .tag.discover, .tag.under_validation, .tag.actively_monitored { background: var(--blue-bg); color: var(--blue); }
+    .tag.escalate { background: var(--purple-bg); color: var(--purple); }
+    .tag.block, .tag.actively_invalidated, .tag.superseded { background: var(--red-bg); color: var(--red); }
+
+    .item-card { border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 11px; background: #FAF9F5; }
+    .item-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .mono { font-family: var(--mono); font-size: 11.5px; }
+    .formula { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-top: 3px; }
+    .neg-box { margin-top: 8px; padding: 8px 10px; background: var(--red-bg); color: var(--red); border-radius: 6px; font-size: 12px; }
+    .esc-box { margin-top: 6px; padding: 6px 10px; background: var(--amber-bg); color: var(--amber); border-radius: 6px; font-size: 11.5px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; font-size: 12px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+    @media (max-width: 960px) { .grid-4, .grid-5 { grid-template-columns: 1fr 1fr; } }
+
+    .bar-row { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 12px; }
+    .bar-lbl { width: 120px; font-weight: 600; }
+    .bar-track { flex: 1; height: 8px; background: var(--surface-alt); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--green); transition: width 0.3s; }
+    .bar-val { width: 42px; text-align: right; font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+
+    .feed-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .feed-row:last-child { border-bottom: none; }
+
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 14px; }
+    .stat-big { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--ink); margin: 3px 0; }
+    .stat-big.green { color: var(--green); }
+
+    details { margin-top: 8px; }
+    summary { cursor: pointer; font-family: var(--mono); font-size: 11px; color: var(--muted); font-weight: 600; }
+    pre.contract-code {
+      background: #191918; color: #E8E5DC; padding: 10px 12px; border-radius: 6px;
+      font-family: var(--mono); font-size: 11px; overflow-x: auto; margin-top: 6px; line-height: 1.45;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { text-align: left; padding: 9px 11px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--surface-alt); font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; color: var(--muted); }
+    tfoot td { background: var(--surface-alt); font-weight: 700; font-family: var(--mono); border-top: 2px solid var(--ink); }
+    .hub-tag { display: inline-block; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-family: var(--mono); font-size: 10.5px; margin: 2px 4px 2px 0; }
+
+    .toast {
+      position: fixed; bottom: 22px; right: 24px; background: var(--ink); color: #fff;
+      padding: 12px 18px; border-radius: 8px; border-left: 4px solid #6EE7B7;
+      font-size: 13px; box-shadow: 0 6px 20px rgba(0,0,0,0.28); opacity: 0; pointer-events: none;
+      transition: opacity 0.25s; z-index: 999; max-width: 420px;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-logo-wrap">
+        <img src="/static/anthropic-flower.png" alt="Anthropic Archetypus Flower Emblem" />
+      </div>
+      <div>
+        <span class="badge">Archetypus Thinking</span>
+        <div style="font-weight:700;font-size:17px;line-height:1.25;">Anthropic Global Archetypus Thinking &amp; Workforce Platform</div>
+        <div class="subtitle">Autonomous Organisational Intelligence System · Live Cross-Hub Telemetry &amp; EV Decision Engine</div>
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi" id="box-cpo"><div class="kpi-val green" id="kpi-cpo">$12.77</div><div class="kpi-lbl">Cost / Validated Outcome</div></div>
+      <div class="kpi" id="box-reuse"><div class="kpi-val green" id="kpi-reuse">76.0% (+51.9pp)</div><div class="kpi-lbl">Reuse Rate (vs Ctrl)</div></div>
+      <div class="kpi" id="box-saved"><div class="kpi-val green" id="kpi-saved">262,600t</div><div class="kpi-lbl">Counterfactual Saved</div></div>
+      <div class="kpi" id="box-billed"><div class="kpi-val" id="kpi-billed">45,300t</div><div class="kpi-lbl">Billed Tokens (7d)</div></div>
+    </div>
+  </header>
+
+  <div class="subnav">
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-ops" onclick="switchView('ops')">01 · Live Intelligence &amp; Decision Engine</button>
+      <button class="nav-tab" id="tab-lifecycle" onclick="switchView('lifecycle')">02 · Execution Contracts &amp; Knowledge Graph</button>
+      <button class="nav-tab" id="tab-board" onclick="switchView('board')">03 · Global Workforce (5,300 Staff · 661 Roles) &amp; Economics</button>
+    </div>
+    <div class="live-controls">
+      <button class="live-pill" id="live-toggle" onclick="toggleLiveStream()">
+        <span class="dot"></span>
+        <span id="live-status-text">LIVE STREAMING (4s)</span>
+      </button>
+      <button class="btn-ghost" onclick="triggerPulse()">+ Simulate Global Activity</button>
+      <button class="btn-ghost" onclick="resetDemo()">Reset Demo</button>
+    </div>
+  </div>
+
+  <div style="padding:0 24px;">
+    <div class="scale-strip">
+      <div><strong style="color:var(--accent-dark);">CORE PRINCIPLE:</strong> Discover once. Validate properly. Reuse everywhere. Recompute only when necessary.</div>
+      <div class="scale-pills">
+        <span class="scale-pill" onclick="switchView('board')" id="strip-divisions">20 Divisions · 39 Sub-Pods</span>
+        <span class="scale-pill" onclick="switchView('board')" id="strip-headcount">5,300 Global Staff</span>
+        <span class="scale-pill" onclick="switchView('board')" id="strip-roles">661 Open Roles</span>
+        <span class="scale-pill" onclick="switchView('board')" id="strip-hubs">12 Global Hubs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 1: GUIDED DECISION WORKSPACE + LIVE LAYER E & STREAM -->
+  <div class="container" id="view-ops">
+    <div>
+      <div class="card">
+        <div class="step-num">Step 1 · Try a Realistic Board Scenario (One Click)</div>
+        <h2>Test How Archetypus Routes Work</h2>
+        <div class="helper">Click any scenario below to pre-fill a real cross-division task, or choose your own division.</div>
+
+        <div class="scenario-grid">
+          <button class="scen-btn" onclick="loadPreset('reuse')">
+            <div class="scen-title">1. Instant Reuse (0 Tokens)</div>
+            <div class="scen-sub">Sales RFP pulls verified SOC2 pack</div>
+          </button>
+          <button class="scen-btn" onclick="loadPreset('revalidate')">
+            <div class="scen-title">2. Model Drift Check</div>
+            <div class="scen-sub">Sonnet 4.5 → 5.5 triggers Revalidate</div>
+          </button>
+          <button class="scen-btn" onclick="loadPreset('discover')">
+            <div class="scen-title">3. New Knowledge Gap</div>
+            <div class="scen-sub">Policy drafts APAC sovereign delta</div>
+          </button>
+          <button class="scen-btn" onclick="loadPreset('block')">
+            <div class="scen-title">4. Safety &amp; Access Guard</div>
+            <div class="scen-sub">Blocks unauthorized / failed path</div>
+          </button>
+        </div>
+
+        <label for="dept-select">Step 2 · Select Division &amp; Execution Pod</label>
+        <select id="dept-select" onchange="onDeptChange()"></select>
+        <select id="subdept-select" style="margin-top:7px;"></select>
+
+        <label for="task-obj">Step 3 · What Does This Team Need Accomplished?</label>
+        <textarea id="task-obj">Retrieve canonical SOC2 Type II and Zero-Data-Retention security pack for Tier-1 bank RFP.</textarea>
+
+        <div class="grid-2">
+          <div>
+            <label for="model-select">Target Model</label>
+            <select id="model-select">
+              <option value="claude-sonnet-5-5" selected>Claude Sonnet 5.5</option>
+              <option value="claude-opus-5-5">Claude Opus 5.5</option>
+              <option value="claude-haiku-5-5">Claude Haiku 5.5</option>
+            </select>
+          </div>
+          <div>
+            <label for="val-input">Business Value ($)</label>
+            <input type="number" id="val-input" value="850" min="50" step="50" />
+          </div>
+        </div>
+
+        <details>
+          <summary>Advanced Governance &amp; Access Overrides (Optional)</summary>
+          <div class="grid-2" style="margin-top:8px;">
+            <div>
+              <label for="risk-select">Risk Tier</label>
+              <select id="risk-select">
+                <option value="0">Level 0 · Autonomous</option>
+                <option value="1">Level 1 · AI Director</option>
+                <option value="2">Level 2 · Dept Leader</option>
+                <option value="3">Level 3 · Human Authority</option>
+              </select>
+            </div>
+            <div>
+              <label for="perm-select">Access Permission</label>
+              <select id="perm-select">
+                <option value="true">Authorised Scope</option>
+                <option value="false">Simulate Restricted Access</option>
+              </select>
+            </div>
+          </div>
+          <input type="hidden" id="dataset-select" value="soc2-iso-2026-q4" />
+        </details>
+
+        <button class="btn-primary" onclick="dispatchGate()">Evaluate Expected Value &amp; Route Task →</button>
+      </div>
+    </div>
+
+    <div>
+      <!-- DECISION ENGINE RESULT CARD -->
+      <div class="card" id="decision-card" style="border-left:4px solid var(--green);">
+        <div class="step-num">Decision Engine Output · Expected Value (EV = P(S) × V − C − R)</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <h2 style="margin:0;" id="decision-headline">Ready — Click "Evaluate Expected Value &amp; Route Task"</h2>
+          <span class="tag reuse" id="gate-route-badge">STANDBY</span>
+        </div>
+        <div style="font-size:13px;margin-top:8px;" id="gate-rationale">
+          Archetypus checks whether the organisation already has validated knowledge, verifies compatibility with current 5.5 models, and picks the highest-value route.
+        </div>
+        <div id="compat-bars" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- LAYER E: PREDICTIVE INTELLIGENCE -->
+      <div class="card" style="border-left:4px solid var(--accent);">
+        <div class="step-num">Layer E · Predictive Intelligence &amp; Opportunity Memory</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <h2 style="margin:0;">Highest-Value Next Actions Identified by Archetypus</h2>
+          <span class="tag revalidate">RECOMMENDATION ONLY</span>
+        </div>
+        <div id="layer-e-list" style="margin-top:10px;"></div>
+      </div>
+
+      <!-- LIVE CROSS-HUB ACTIVITY TICKER -->
+      <div class="card">
+        <div class="step-num">Live Cross-Hub Intelligence Stream (12 Global Offices)</div>
+        <h2>Real-Time Reuse, Revalidation &amp; Governance Events</h2>
+        <div id="live-feed-list" style="margin-top:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: EXECUTION CONTRACTS & KNOWLEDGE GRAPH -->
+  <div class="full-container" id="view-lifecycle">
+    <div class="card">
+      <div class="step-num">Cross-Division Execution Contracts (Batons)</div>
+      <h2>Active Handoffs, Acceptance Criteria, Rollback Plans &amp; Human Approvals</h2>
+      <div id="baton-list" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="card">
+      <div class="step-num">5-Layer Organisational Knowledge Graph</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <h2 style="margin:0;">Lifecycle &amp; Freshness Status Across Layers A–D</h2>
+        <select id="layer-filter" style="width:auto;" onchange="renderKnowledge()">
+          <option value="ALL">All Knowledge Layers (A–D)</option>
+          <option value="A">Layer A · Research &amp; Experiment Memory</option>
+          <option value="B">Layer B · Validated Organisational Knowledge</option>
+          <option value="C">Layer C · Operational Memory</option>
+          <option value="D">Layer D · Negative-Finding Memory</option>
+        </select>
+      </div>
+      <div id="knowledge-list"></div>
+    </div>
+  </div>
+
+  <!-- VIEW 3: GLOBAL WORKFORCE MATRIX & FULL ECONOMIC ENGINE -->
+  <div class="full-container" id="view-board">
+    <div class="card">
+      <div class="step-num">Global Organisational Footprint &amp; Reconciled Capacity</div>
+      <h2>5,300 Global Staff · 661 Open Roles · 20 Controlled Divisions · 39 Sub-Pods · 12 Global Hubs</h2>
+      <div class="grid-4" style="margin-top:10px;">
+        <div class="stat-card"><div class="step-num">Total Global Workforce</div><div class="stat-big" id="w-headcount">5,300</div><div class="formula">Reconciled across 20 divisions</div></div>
+        <div class="stat-card"><div class="step-num">Active Open Roles</div><div class="stat-big" id="w-roles">661</div><div class="formula">Exact sum of 20 division counts</div></div>
+        <div class="stat-card"><div class="step-num">Divisions &amp; Sub-Pods</div><div class="stat-big" id="w-divs">20 / 39</div><div class="formula">1 shared 5-layer intelligence graph</div></div>
+        <div class="stat-card"><div class="step-num">Reuse vs. 15% Control</div><div class="stat-big green" id="ctrl-lift">76.0% vs 24.1%</div><div class="formula">Held-out uncached control group</div></div>
+      </div>
+      <div id="global-hubs-bar" style="margin-top:4px;"></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px;">
+        <div>
+          <div class="step-num">Complete Breakdown of Department &amp; Roles Across the Global Organisation</div>
+          <h2 style="margin:0;">All 20 Divisions Ranked by Open Roles (5,300 Staff · 661 Open Roles · 39 Sub-Pods)</h2>
+        </div>
+        <input type="search" id="matrix-search" style="max-width:340px;" placeholder="Search division, sub-pod, or hub (e.g. Dublin, Sales)..." oninput="renderMatrix()" />
+      </div>
+      <div style="overflow-x:auto;margin-top:10px;">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Division &amp; Director</th>
+              <th>Est. Staff</th>
+              <th>Open Roles</th>
+              <th>Sub-Department Execution Pods</th>
+              <th>Primary Global Hubs</th>
+              <th>Base Tier</th>
+              <th>Governance Mandate</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-body"></tbody>
+          <tfoot>
+            <tr>
+              <td>—</td>
+              <td>GLOBAL TOTALS (20 DIVISIONS)</td>
+              <td>5,300</td>
+              <td>661</td>
+              <td>39 Sub-Pods</td>
+              <td>12 Global Offices</td>
+              <td>Levels 0–3</td>
+              <td>1 Autonomous Organisational Intelligence System (Layers A–E)</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="step-num">Full Economic Intelligence Engine (5 Separate Cost Buckets)</div>
+      <h2>Cost per Validated Outcome = (Inference + Retrieval + Human Review + Experimentation + Infrastructure) ÷ Validated Outcomes</h2>
+      <div class="grid-5" style="margin-top:10px;">
+        <div class="stat-card"><div class="step-num">1. Inference Cost</div><div class="stat-big" id="cost-inf">$14.82</div><div class="formula">Direct LLM API spend</div></div>
+        <div class="stat-card"><div class="step-num">2. Retrieval / Storage</div><div class="stat-big" id="cost-ret">$3.40</div><div class="formula">Vector + SQL index queries</div></div>
+        <div class="stat-card"><div class="step-num">3. Human Review</div><div class="stat-big" id="cost-hum">$185.00</div><div class="formula">Level 2/3 verifier hours</div></div>
+        <div class="stat-card"><div class="step-num">4. Experimentation</div><div class="stat-big" id="cost-exp">$62.50</div><div class="formula">Canary &amp; eval cluster runs</div></div>
+        <div class="stat-card"><div class="step-num">5. Infrastructure</div><div class="stat-big" id="cost-infra">$28.10</div><div class="formula">Orchestrator &amp; telemetry</div></div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:0;">
+        <div class="stat-card"><div class="step-num">Total Full Cost (7d)</div><div class="stat-big" id="cost-total">$293.82</div><div class="formula">Across <span id="val-count">23</span> validated outcomes</div></div>
+        <div class="stat-card"><div class="step-num">Cost / Validated Outcome</div><div class="stat-big green" id="cost-cpo">$12.77</div><div class="formula">True fully-loaded unit cost</div></div>
+        <div class="stat-card"><div class="step-num">Counterfactual Saved (7d)</div><div class="stat-big green" id="tok-cf">262,600t</div><div class="formula">Cached: <span id="tok-cache">94,200t</span> | Retrieved: <span id="tok-ret">86,000t</span></div></div>
+        <div class="stat-card"><div class="step-num">Actually Billed Tokens</div><div class="stat-big" id="tok-bill">45,300t</div><div class="formula">33,975t input + 11,325t output</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="step-num">Immutable Governance Control Plane Audit Log</div>
+      <h2>Least-Privilege Access, Independent Verification &amp; Evidence Hashes</h2>
+      <table>
+        <thead>
+          <tr><th>Audit ID</th><th>Timestamp (UTC)</th><th>Actor</th><th>Governance Level</th><th>Contract / Target</th><th>Evidence Hash</th><th>Decision</th></tr>
+        </thead>
+        <tbody id="audit-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    let state = {};
+    let liveEnabled = true;
+    let pulseTimer = null;
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3400);
+    }
+
+    function flashKpis() {
+      ['box-cpo', 'box-reuse', 'box-saved', 'box-billed'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.add('flash');
+        setTimeout(() => el.classList.remove('flash'), 550);
+      });
+    }
+
+    function switchView(v) {
+      document.getElementById('view-ops').style.display = v === 'ops' ? 'grid' : 'none';
+      document.getElementById('view-lifecycle').style.display = v === 'lifecycle' ? 'block' : 'none';
+      document.getElementById('view-board').style.display = v === 'board' ? 'block' : 'none';
+      ['ops', 'lifecycle', 'board'].forEach(k => document.getElementById('tab-' + k).classList.toggle('active', k === v));
+    }
+
+    function toggleLiveStream() {
+      liveEnabled = !liveEnabled;
+      const pill = document.getElementById('live-toggle');
+      pill.classList.toggle('paused', !liveEnabled);
+      document.getElementById('live-status-text').innerText = liveEnabled ? 'LIVE STREAMING (4s)' : 'STREAM PAUSED';
+      if (liveEnabled) {
+        startPulseLoop();
+        showToast('Live cross-hub telemetry streaming resumed.');
+      } else {
+        clearInterval(pulseTimer);
+        showToast('Live telemetry stream paused.');
+      }
+    }
+
+    function startPulseLoop() {
+      clearInterval(pulseTimer);
+      pulseTimer = setInterval(() => {
+        if (liveEnabled) triggerPulse(true);
+      }, 4000);
+    }
+
+    async function triggerPulse(silent = false) {
+      const res = await fetch('/api/pulse', { method: 'POST' });
+      if (res.ok) {
+        state = await res.json();
+        renderAll();
+        flashKpis();
+        if (!silent) showToast('Ingested live cross-hub telemetry event.');
+      }
+    }
+
+    async function loadState() {
+      const res = await fetch('/api/state');
+      state = await res.json();
+      const dSel = document.getElementById('dept-select');
+      if (!dSel.options.length) {
+        state.departments.forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = `${d.name} (${d.headcount} staff · ${d.roles} roles)`;
+          dSel.appendChild(opt);
+        });
+        onDeptChange();
+      }
+      renderAll();
+    }
+
+    function onDeptChange() {
+      const d = state.departments.find(x => x.id === document.getElementById('dept-select').value) || state.departments[0];
+      const sSel = document.getElementById('subdept-select');
+      sSel.innerHTML = '';
+      d.sub_departments.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.id;
+        opt.textContent = s.name;
+        sSel.appendChild(opt);
+      });
+      document.getElementById('risk-select').value = String(d.base_risk);
+    }
+
+    function loadPreset(type) {
+      document.getElementById('perm-select').value = 'true';
+      if (type === 'reuse') {
+        document.getElementById('dept-select').value = 'sales'; onDeptChange();
+        document.getElementById('subdept-select').value = 'rfp-desk';
+        document.getElementById('task-obj').value = 'Retrieve canonical SOC2 Type II and Zero-Data-Retention security pack for Tier-1 bank RFP.';
+        document.getElementById('model-select').value = 'claude-sonnet-5-5';
+        document.getElementById('dataset-select').value = 'soc2-iso-2026-q4';
+        document.getElementById('val-input').value = '850';
+        document.getElementById('risk-select').value = '0';
+        showToast('Loaded Scenario 1: Sales RFP Zero-Token Reuse');
+      } else if (type === 'revalidate') {
+        document.getElementById('dept-select').value = 'ai-research'; onDeptChange();
+        document.getElementById('subdept-select').value = 'interp';
+        document.getElementById('task-obj').value = 'Validate 200k KV-cache 4-bit quantization on claude-sonnet-5-5 inference kernel.';
+        document.getElementById('model-select').value = 'claude-sonnet-5-5';
+        document.getElementById('dataset-select').value = 'eval-suite-v4.2';
+        document.getElementById('val-input').value = '4200';
+        document.getElementById('risk-select').value = '2';
+        showToast('Loaded Scenario 2: Model Generation Drift (4.5 -> 5.5)');
+      } else if (type === 'discover') {
+        document.getElementById('dept-select').value = 'public-policy'; onDeptChange();
+        document.getElementById('task-obj').value = 'Author APAC Sovereign Cloud AI governance delta module.';
+        document.getElementById('model-select').value = 'claude-opus-5-5';
+        document.getElementById('dataset-select').value = 'apac-sovereign-v1';
+        document.getElementById('val-input').value = '2800';
+        document.getElementById('risk-select').value = '2';
+        showToast('Loaded Scenario 3: Net-New Knowledge Gap Discovery');
+      } else {
+        document.getElementById('dept-select').value = 'marketing'; onDeptChange();
+        document.getElementById('task-obj').value = 'Access restricted Safeguards adversarial red-team jailbreak vectors.';
+        document.getElementById('perm-select').value = 'false';
+        document.getElementById('val-input').value = '500';
+        showToast('Loaded Scenario 4: Least-Privilege Security Block');
+      }
+    }
+
+    async function dispatchGate() {
+      const payload = {
+        dept_id: document.getElementById('dept-select').value,
+        sub_dept_id: document.getElementById('subdept-select').value,
+        objective: document.getElementById('task-obj').value,
+        target_model: document.getElementById('model-select').value,
+        target_dataset: document.getElementById('dataset-select').value,
+        task_value_usd: Number(document.getElementById('val-input').value),
+        risk_level: Number(document.getElementById('risk-select').value),
+        has_permission: document.getElementById('perm-select').value === 'true'
+      };
+      const res = await fetch('/api/dispatch', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      state = data.state;
+
+      const g = data.gate_eval;
+      const ev = g.ev_formula;
+      const badge = document.getElementById('gate-route-badge');
+      badge.innerText = `ROUTE: ${g.route}`;
+      badge.className = `tag ${g.route.toLowerCase()}`;
+
+      document.getElementById('decision-headline').innerText =
+        `Selected Route: ${g.route} · Expected Value: $${ev.EV.toLocaleString()} (Applicability: ${Math.round(g.present_applicability * 100)}%)`;
+      document.getElementById('gate-rationale').innerText = g.rationale;
+
+      const dims = [
+        ['Model Match', g.compatibility.model_version],
+        ['Dataset Match', g.compatibility.dataset],
+        ['Evidence Quality', g.compatibility.evidence_quality],
+        ['Freshness', g.compatibility.freshness],
+        ['Permissions', g.compatibility.permissions],
+      ];
+      document.getElementById('compat-bars').innerHTML = dims.map(([label, score]) => {
+        const pct = Math.round(score * 100);
+        const color = pct >= 80 ? 'var(--green)' : (pct >= 45 ? 'var(--amber)' : 'var(--red)');
+        return `
+          <div class="bar-row">
+            <div class="bar-lbl">${label}</div>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color};"></div></div>
+            <div class="bar-val" style="color:${color};">${pct}%</div>
+          </div>`;
+      }).join('');
+
+      renderAll();
+      flashKpis();
+      showToast(`Routed via ${g.route} · Contract ${data.contract_id} logged`);
+    }
+
+    async function convertPred(id) {
+      const res = await fetch(`/api/layer-e/${id}/convert`, { method: 'POST' });
+      if (res.ok) {
+        state = await res.json();
+        renderAll();
+        switchView('lifecycle');
+        showToast(`Converted ${id} into a governed Execution Contract.`);
+      }
+    }
+
+    async function ackBaton(id) {
+      const res = await fetch(`/api/baton/${id}/ack`, { method: 'POST' });
+      if (res.ok) { state = await res.json(); renderAll(); showToast(`Contract ${id} acknowledged by receiving owner.`); }
+    }
+
+    async function approveBaton(id) {
+      const res = await fetch(`/api/baton/${id}/approve`, { method: 'POST' });
+      if (res.ok) { state = await res.json(); renderAll(); showToast(`Contract ${id} verified & promoted to CANONICAL.`); }
+    }
+
+    async function resetDemo() {
+      const res = await fetch('/api/reset', { method: 'POST' });
+      if (res.ok) { state = await res.json(); renderAll(); showToast('Archetypus state reset to clean baseline.'); }
+    }
+
+    function renderAll() {
+      const e = state.economics;
+      const tot = state.reconciled_totals;
+
+      document.getElementById('strip-divisions').innerText = `${tot.divisions} Divisions · ${tot.sub_pods} Sub-Pods`;
+      document.getElementById('strip-headcount').innerText = `${tot.headcount.toLocaleString()} Global Staff`;
+      document.getElementById('strip-roles').innerText = `${tot.open_roles.toLocaleString()} Open Roles`;
+      document.getElementById('strip-hubs').innerText = `${tot.global_hubs} Global Hubs`;
+
+      document.getElementById('w-headcount').innerText = tot.headcount.toLocaleString();
+      document.getElementById('w-roles').innerText = tot.open_roles.toLocaleString();
+      document.getElementById('w-divs').innerText = `${tot.divisions} / ${tot.sub_pods}`;
+
+      const hubs = state.operating_principle.global_hubs || [];
+      document.getElementById('global-hubs-bar').innerHTML =
+        `<span class="mono" style="font-size:11px;font-weight:700;margin-right:6px;">ACTIVE GLOBAL HUBS (${hubs.length}):</span>` +
+        hubs.map(h => `<span class="hub-tag">${h}</span>`).join('');
+
+      document.getElementById('kpi-cpo').innerText = '$' + e.cost_per_validated_outcome_usd.toFixed(2);
+      document.getElementById('kpi-reuse').innerText = `${e.reuse_rate_pct}% (+${e.net_lift_pp}pp)`;
+      document.getElementById('kpi-saved').innerText = e.tokens_counterfactual_saved.toLocaleString() + 't';
+      document.getElementById('kpi-billed').innerText = e.tokens_billed_total.toLocaleString() + 't';
+
+      document.getElementById('cost-inf').innerText = '$' + e.cost_inference_usd.toFixed(2);
+      document.getElementById('cost-ret').innerText = '$' + e.cost_retrieval_storage_usd.toFixed(2);
+      document.getElementById('cost-hum').innerText = '$' + e.cost_human_review_usd.toFixed(2);
+      document.getElementById('cost-exp').innerText = '$' + e.cost_experimentation_usd.toFixed(2);
+      document.getElementById('cost-infra').innerText = '$' + e.cost_infrastructure_usd.toFixed(2);
+      document.getElementById('cost-total').innerText = '$' + e.total_full_cost_usd.toFixed(2);
+      document.getElementById('val-count').innerText = e.validated_outcomes;
+      document.getElementById('cost-cpo').innerText = '$' + e.cost_per_validated_outcome_usd.toFixed(2);
+      document.getElementById('tok-cf').innerText = e.tokens_counterfactual_saved.toLocaleString() + 't';
+      document.getElementById('tok-cache').innerText = e.tokens_cached_read.toLocaleString() + 't';
+      document.getElementById('tok-ret').innerText = e.tokens_retrieved_memory.toLocaleString() + 't';
+      document.getElementById('tok-bill').innerText = `${e.tokens_billed_total.toLocaleString()}t`;
+      document.getElementById('ctrl-lift').innerText = `${e.reuse_rate_pct}% vs ${e.control_rate_pct}%`;
+
+      renderLayerE();
+      renderLiveFeed();
+      renderBatons();
+      renderKnowledge();
+      renderMatrix();
+      renderAudits();
+    }
+
+    function renderLayerE() {
+      document.getElementById('layer-e-list').innerHTML = state.layer_e.map(p => `
+        <div class="item-card">
+          <div class="item-head">
+            <span class="mono"><strong>${p.pred_id}</strong> · ${p.opportunity_type} · ${p.target_division}</span>
+            <span class="tag reuse">Net EV: $${p.ev_score.toLocaleString()}</span>
+          </div>
+          <div style="font-size:12.5px;"><strong>Why:</strong> ${p.signal_source}</div>
+          <div style="font-size:12.5px;margin-top:2px;"><strong>Next Best Action:</strong> ${p.recommended_action}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:8px;">
+            <span class="mono" style="font-size:10.5px;color:var(--muted);">${p.promotion_guardrail}</span>
+            ${p.status === 'ACTIONABLE' ? `<button class="btn-sm" onclick="convertPred('${p.pred_id}')">Launch Governed Contract →</button>` : `<span class="tag discover">${p.status}</span>`}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderLiveFeed() {
+      document.getElementById('live-feed-list').innerHTML = (state.live_feed || []).map(f => `
+        <div class="feed-row">
+          <span class="mono" style="color:var(--muted);white-space:nowrap;">${f.time}</span>
+          <span class="tag ${f.route.toLowerCase()}">${f.route}</span>
+          <strong style="white-space:nowrap;">${f.hub}</strong>
+          <span style="color:var(--muted);">${f.detail}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderBatons() {
+      document.getElementById('baton-list').innerHTML = state.batons.map(b => {
+        const contractJson = JSON.stringify({
+          contract_id: b.contract_id, from_pod: b.from_pod, receiving_owner: b.receiving_owner,
+          source_knowledge_ids: b.source_knowledge_ids, acceptance_criteria: b.acceptance_criteria,
+          dependencies: b.dependencies, rollback_plan: b.rollback_plan, deadline: b.deadline,
+          evidence_manifest: b.evidence_manifest, budget_remaining_usd: b.budget_remaining_usd
+        }, null, 2);
+        return `
+        <div class="item-card">
+          <div class="item-head">
+            <span class="mono"><strong>${b.contract_id}</strong> · ${b.from_pod} → <strong>${b.receiving_owner}</strong></span>
+            <span class="tag ${b.receiver_ack === 'ACKNOWLEDGED' ? 'reuse' : 'revalidate'}">HANDSHAKE: ${b.receiver_ack}</span>
+          </div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${b.objective}</div>
+          <div class="mono" style="color:var(--muted);">Governance: ${b.approval_status} · Deadline: ${b.deadline} · Budget: $${b.budget_remaining_usd}</div>
+          <div class="esc-box">${b.escalation_reason}</div>
+          <details>
+            <summary>Inspect Machine-Readable Execution Contract &amp; Rollback Plan</summary>
+            <pre class="contract-code">${contractJson}</pre>
+          </details>
+          <div style="display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;">
+            ${b.receiver_ack !== 'ACKNOWLEDGED' ? `<button class="btn-sm" onclick="ackBaton('${b.contract_id}')">Acknowledge Receipt</button>` : ''}
+            ${b.approval_status === 'AWAITING_APPROVAL' ? `<button class="btn-approve" onclick="approveBaton('${b.contract_id}')">Verify &amp; Promote to Canonical</button>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderKnowledge() {
+      const f = document.getElementById('layer-filter').value;
+      const filtered = f === 'ALL' ? state.knowledge : state.knowledge.filter(k => k.layer.startsWith(f));
+      document.getElementById('knowledge-list').innerHTML = filtered.map(k => `
+        <div class="item-card">
+          <div class="item-head">
+            <span class="mono"><strong>${k.entry_id}</strong> · ${k.layer}</span>
+            <div>
+              <span class="tag ${k.lifecycle_state.toLowerCase()}">${k.lifecycle_state}</span>
+              <span class="tag ${k.expiry_status.toLowerCase()}">${k.expiry_status}</span>
+            </div>
+          </div>
+          <div style="font-weight:700;font-size:13.5px;">${k.title}</div>
+          <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">${k.summary}</div>
+          <div class="grid-2 mono" style="color:var(--muted);">
+            <div>Owner: ${k.owner} (${k.dept})</div>
+            <div>Verifier: ${k.independent_reviewer}</div>
+            <div>Baseline: ${k.model_version} · ${k.dataset_version}</div>
+            <div>Historical Conf: ${Math.round(k.historical_confidence*100)}% · Perms: ${k.permissions}</div>
+          </div>
+          ${k.failure_conditions ? `<div class="neg-box"><strong>Conditional Failure:</strong> ${k.failure_conditions}<br><strong>Retest Trigger:</strong> ${k.retest_triggers}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function renderMatrix() {
+      const q = (document.getElementById('matrix-search')?.value || '').toLowerCase().trim();
+      const rows = state.departments.filter(d => {
+        if (!q) return true;
+        const subText = d.sub_departments.map(s => s.name).join(' ').toLowerCase();
+        return d.name.toLowerCase().includes(q) || d.hubs.toLowerCase().includes(q) || subText.includes(q) || d.charter.toLowerCase().includes(q);
+      });
+
+      document.getElementById('matrix-body').innerHTML = rows.map((d, idx) => `
+        <tr>
+          <td class="mono">${idx + 1}</td>
+          <td><strong>${d.name}</strong><br><span class="mono" style="color:var(--muted);">${d.director}</span></td>
+          <td class="mono">${d.headcount.toLocaleString()}</td>
+          <td class="mono"><strong>${d.roles}</strong></td>
+          <td>${d.sub_departments.map(s => `• ${s.name}`).join('<br>')}</td>
+          <td class="mono" style="font-size:11px;">${d.hubs}</td>
+          <td class="mono">Level ${d.base_risk}</td>
+          <td>${d.charter}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderAudits() {
+      document.getElementById('audit-body').innerHTML = state.audit_log.map(a => `
+        <tr>
+          <td class="mono">${a.audit_id}</td>
+          <td class="mono">${a.timestamp}</td>
+          <td>${a.actor}</td>
+          <td class="mono">${a.governance_level}</td>
+          <td class="mono">${a.target_id}</td>
+          <td class="mono">${a.evidence_hash}</td>
+          <td><span class="tag reuse">${a.decision}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    loadState();
+    startPulseLoop();
+  </script>
+</body>
+</html>
